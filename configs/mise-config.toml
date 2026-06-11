@@ -1,0 +1,13 @@
+[tools]
+bat = "latest"
+bun = "latest"
+eza = "latest"
+fd = "latest"
+fzf = "latest"
+go = "latest"
+node = "24"
+ripgrep = "latest"
+starship = "latest"
+tmux = "latest"
+uv = "latest"
+zoxide = "latest"

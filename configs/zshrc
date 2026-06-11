@@ -1,0 +1,77 @@
+# =============================================================================
+# Zsh Configuration — Optimized Modern Terminal Environment
+# =============================================================================
+
+# ---- Path Extensions ----
+export PATH="/home/huang/.bun/bin:$PATH"
+
+# ---- Mise (polyglot version manager) ----
+# Must be first to ensure all mise-managed tools are available
+eval "$(~/.local/bin/mise activate zsh)"
+
+# ---- Oh My Zsh Core ----
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME=""            # Disabled — using Starship prompt instead
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# ---- Plugins ----
+# Order matters: zsh-syntax-highlighting must be last
+plugins=(
+    git
+    vi-mode
+    zsh-autosuggestions
+    history-substring-search
+    zoxide
+    fzf
+    zsh-syntax-highlighting
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# =============================================================================
+# Plugin & Tool Configuration
+# =============================================================================
+
+# ---- zsh-autosuggestions ----
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#808080"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+# ---- history-substring-search ----
+# Use UP/DOWN arrows and Ctrl+P/N for Fish-style history search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+# ---- fzf (fuzzy finder) ----
+# Uses fd for file listing and bat for preview
+export FZF_DEFAULT_OPTS="
+  --height 40%
+  --layout=reverse
+  --border rounded
+  --preview 'bat --style=numbers --color=always {} 2>/dev/null || ls -la {}'
+  --preview-window 'right:60%'
+"
+export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} 2>/dev/null'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --icons --level=2 {} 2>/dev/null'"
+
+# ---- Tool Aliases ----
+# eza (modern ls replacement)
+alias ls='eza --group-directories-first --icons'
+alias ll='eza --group-directories-first --icons -lagh'
+alias la='eza --group-directories-first --icons -a'
+alias lt='eza --group-directories-first --icons -T --level=2'
+alias l='eza --group-directories-first --icons -l'
+
+# bat (modern cat replacement with syntax highlighting)
+alias cat='bat --style=plain --paging=never'
+
+# ripgrep (fast grep) — uncomment to replace grep globally
+# alias grep='rg'
+
+# fd (fast find) — uncomment to replace find globally
+# alias find='fd'
+
+# ---- Starship Prompt (must be last) ----
+eval "$(starship init zsh)"

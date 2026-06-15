@@ -73,7 +73,7 @@
 
 ### 1.5 Starship Prompt 配置
 
-`~/.config/starship.toml` 采用 Powerline 风格，但是从第二行开始输入
+`~/.config/starship.toml` 采用 gruvbox-rainbow 风格
 
 ---
 
@@ -171,7 +171,6 @@
 | 文件 | 变更 |
 |------|------|
 | `~/.zshrc` | 重写，包含插件配置与工具别名 |
-| `~/.config/starship.toml` | 新建，Powerline 风格 Prompt 配置 |
 | `~/.config/bat/config` | 新建，主题 Catppuccin Mocha |
 | `~/.config/mise/config.toml` | 新增 `zoxide = "latest"` |
 | `~/.tmux.conf` | 新建，TPM 插件 + Vim 键位 + Catppuccin 主题 |

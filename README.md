@@ -73,17 +73,7 @@
 
 ### 1.5 Starship Prompt 配置
 
-`~/.config/starship.toml` 采用 Powerline 风格，显示：
-
-- 🎯 操作系统图标
-- 👤 用户名
-- 📂 当前目录（截断至 repo 根或 3 级深度）
-- 🌿 Git 分支 + 状态（修改/暂存/提交差异）
-- 🔧 运行时版本：Node.js / Bun / Go / Rust / Python
-- 🐳 Docker 上下文
-- 🕐 当前时间
-- ⏱️ 命令耗时（>3s 时显示）
-- ✖ 错误状态码（非零时显示）
+`~/.config/starship.toml` 采用 Powerline 风格，但是从第二行开始输入
 
 ---
 

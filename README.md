@@ -81,21 +81,21 @@
 
 ### 2.1 基本信息
 
-- **版本**：tmux 3.6a（via mise）
-- **Prefix 键**：`Ctrl+B`（保持默认，兼容 zsh vi-mode 的 `Ctrl+A`）
-- **主题**：Catppuccin Mocha（via TPM）
-- **插件管理器**：TPM（Tmux Plugin Manager）
+- **上游**：[gpakosz/.tmux](https://github.com/gpakosz/.tmux)（Oh my tmux!）
+- **安装**：一键脚本，`~/.tmux.conf` 为上游 symlink，自定义在 `~/.tmux.conf.local`
+- **版本**：tmux 3.6b（via mise）
+- **Prefix 键**：`Ctrl+B`（主）+ `Ctrl+A`（副）
+- **主题**：Tokyo Night（Oh my tmux! 内置变量）
+- **插件管理器**：TPM（Oh my tmux! 内置集成）
 
 ### 2.2 插件列表
 
 | 插件 | 功能 |
 |------|------|
-| `tmux-plugins/tpm` | 插件管理器 |
 | `tmux-plugins/tmux-sensible` | 开箱即用的合理默认值 |
 | `tmux-plugins/tmux-yank` | 系统剪贴板集成 |
 | `tmux-plugins/tmux-resurrect` | 会话持久化保存/恢复 |
 | `tmux-plugins/tmux-continuum` | 自动保存（每 15 分钟） |
-| `catppuccin/tmux` | Catppuccin Mocha 主题 |
 
 ### 2.3 快捷键
 
@@ -103,14 +103,13 @@
 
 | 按键 | 功能 |
 |------|------|
-| `Prefix + \|` | 垂直分割（当前目录） |
-| `Prefix + -` | 水平分割（当前目录） |
+| `Prefix + \|` | 垂直分割（当前目录，SSH 感知） |
+| `Prefix + -` | 水平分割（当前目录，SSH 感知） |
 | `Prefix + h/j/k/l` | 切换到 左/下/上/右 窗格（Vim 风格） |
-| `Alt + h/j/k/l` | 同上，无需 Prefix |
 | `Prefix + H/J/K/L` | 将窗格向 左/下/上/右 扩大 5 格 |
-| `Prefix + Alt + ←↑↓→` | 同上，方向键版本 |
+| `Prefix + +` | 最大化/还原当前窗格 |
 | `Prefix + x` | 关闭当前窗格 |
-| `Prefix + z` | 最大化/还原当前窗格 |
+| `Prefix + z` | 原生最大化/还原 |
 | `Prefix + {/}` | 窗格位置左/右交换 |
 | `Prefix + Space` | 切换窗格布局 |
 
@@ -118,7 +117,7 @@
 
 | 按键 | 功能 |
 |------|------|
-| `Prefix + c` | 新建窗口 |
+| `Prefix + c` | 新建窗口（SSH 感知，保留当前目录） |
 | `Prefix + ,` | 重命名窗口 |
 | `Prefix + n/p` | 下一个/上一个窗口 |
 | `Prefix + 1-9` | 跳转到指定编号窗口 |
@@ -128,17 +127,17 @@
 
 | 按键 | 功能 |
 |------|------|
-| `Prefix + Ctrl+S` | 交互式会话选择器 |
-| `Prefix + s` | 会话树（fzf 风格） |
+| `Prefix + C-s` | 交互式会话选择器 |
+| `Prefix + s` | 会话树 |
 | `Prefix + w` | 窗口树预览 |
 
 #### 复制模式（Vi 风格）
 
 | 按键 | 功能 |
 |------|------|
-| `Prefix + [` | 进入复制模式 |
+| `Prefix + Enter` | 进入复制模式 |
 | `v` | 开始选择（visual） |
-| `y` / `Enter` | 复制到剪贴板 |
+| `y` | 复制到系统剪贴板 |
 | `Ctrl+r` | 反向搜索 |
 
 #### 其他
@@ -146,11 +145,11 @@
 | 按键 | 功能 |
 |------|------|
 | `Prefix + r` | 重载 tmux 配置 |
-| `Prefix + I` | 安装 TPM 插件（首次使用） |
-| `Prefix + U` | 更新 TPM 插件 |
+| `Prefix + m` | 切换鼠标模式 |
+| `Prefix + I` | 安装 TPM 插件 |
+| `Prefix + u` | 更新 TPM 插件 |
 | `Prefix + d` | 分离会话 |
-| 鼠标滚轮 | 滚动历史内容 |
-| 鼠标拖拽边界 | 调整窗格大小 |
+| 鼠标点击 | 切换窗格 / 选择窗口 / 拖拽 / 滚动 |
 
 ### 2.4 通用配置
 
@@ -160,9 +159,10 @@
 | `escape-time` | 10ms | 加快 Esc 响应（vi-mode 兼容） |
 | `base-index` | 1 | 窗口编号从 1 开始 |
 | `renumber-windows` | on | 关闭窗口后自动重新编号 |
-| `mouse` | on | 全局鼠标支持 |
+| `mouse` | on | 全局鼠标支持（Prefix + m 切换） |
 | `focus-events` | on | 聚焦事件传递 |
 | `default-terminal` | `tmux-256color` | 256 色 + 真彩色 |
+| 会话恢复 | on | continuum 自动保存 + 启动恢复 |
 
 ---
 
@@ -173,19 +173,22 @@
 | `~/.zshrc` | 重写，包含插件配置与工具别名 |
 | `~/.config/bat/config` | 新建，主题 Catppuccin Mocha |
 | `~/.config/mise/config.toml` | 新增 `zoxide = "latest"` |
-| `~/.tmux.conf` | 新建，TPM 插件 + Vim 键位 + Catppuccin 主题 |
-| `~/.tmux/plugins/tpm/` | 新建，Tmux Plugin Manager |
+| `~/.tmux/` | Oh my tmux! 一键安装 |
+| `~/.tmux.conf` | install.sh 自动创建 symlink |
+| `~/.tmux.conf.local` | 自定义配置（主题 / 插件 / 快捷键） |
 
 ---
 
 ## 四、生效方法
 
 ```bash
-# 重新加载 zsh 配置
+# 1. 安装 Oh my tmux!
+curl -fsSL "https://github.com/gpakosz/.tmux/raw/refs/heads/master/install.sh#$(date +%s)" | bash
+
+# 2. 重新加载 zsh 配置
 exec zsh
 
-# 启动 tmux（首次需安装插件：Prefix + I）
-tmux
+# 3. 启动 tmux，安装插件：Prefix + I
 ```
 
 或打开一个新的终端窗口。

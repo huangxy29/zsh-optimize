@@ -1,6 +1,6 @@
 # 终端环境优化总结
 
-> 基于现代 CLI 工具栈与插件，对 zsh + tmux 进行全面优化，提升终端使用效率与体验。
+> 基于现代 CLI 工具栈与插件，对 zsh + mise + tmux 进行全面优化，提升终端使用效率与体验。
 
 ---
 
@@ -8,15 +8,19 @@
 
 ### 1.1 工具栈
 
-| 工具 | 版本 | 用途 | 状态 |
+| 工具 | 用途 | 安装方式 | 状态 |
 |------|------|------|:----:|
-| Starship | 1.25.1 | 现代化 Prompt | ✅ |
-| zoxide | 0.9.9 | 智能 cd 替代 | ✅ |
-| fzf | 0.73.1 | 模糊搜索 | ✅ |
-| eza | 0.23.4 | ls 替代 | ✅ |
-| fd | 10.4.2 | find 替代 | ✅ |
-| ripgrep | 15.1.0 | grep 替代 | ✅ |
-| bat | 0.26.1 | cat 替代 | ✅ |
+| oh-my-zsh | shell管理 | curl  | ✅ |
+| mise | 工具管理 | apt/curl | ✅ |
+| Starship | 现代化 Prompt | mise | ✅ |
+| zoxide | 智能 cd 替代 | mise | ✅ |
+| fzf | 模糊搜索 | mise | ✅ |
+| eza | ls 替代 | mise | ✅ |
+| fd | find 替代 | mise | ✅ |
+| ripgrep | grep 替代 | mise | ✅ |
+| bat | cat 替代 | mise | ✅ |
+| tmux | 会化管理 | mise | ✅ |
+| oh-my-tmux | tmux体验优化 | curl | ✅ |
 
 ### 1.2 插件列表
 
@@ -83,12 +87,21 @@
 
 - **上游**：[gpakosz/.tmux](https://github.com/gpakosz/.tmux)（Oh my tmux!）
 - **安装**：一键脚本，`~/.tmux.conf` 为上游 symlink，自定义在 `~/.tmux.conf.local`
-- **版本**：tmux 3.6b（via mise）
 - **Prefix 键**：`Ctrl+B`（主）+ `Ctrl+A`（副）
-- **主题**：Tokyo Night（Oh my tmux! 内置变量）
 - **插件管理器**：TPM（Oh my tmux! 内置集成）
 
-### 2.2 插件列表
+### 2.2 安装 Oh my tmux
+```bash
+# 1. 执行安装命令
+curl -fsSL "https://github.com/gpakosz/.tmux/raw/refs/heads/master/install.sh#$(date +%s)" | bash
+
+# 2. 重新加载 zsh 配置
+exec zsh
+
+# 3. 启动 tmux，安装插件：Prefix + I
+```
+
+### 2.3 插件列表
 
 | 插件 | 功能 |
 |------|------|
@@ -97,61 +110,67 @@
 | `tmux-plugins/tmux-resurrect` | 会话持久化保存/恢复 |
 | `tmux-plugins/tmux-continuum` | 自动保存（每 15 分钟） |
 
-### 2.3 快捷键
+### 2.4 快捷键
 
 #### 窗格（Pane）操作
 
-| 按键 | 功能 |
-|------|------|
-| `Prefix + \|` | 垂直分割（当前目录，SSH 感知） |
-| `Prefix + -` | 水平分割（当前目录，SSH 感知） |
-| `Prefix + h/j/k/l` | 切换到 左/下/上/右 窗格（Vim 风格） |
-| `Prefix + H/J/K/L` | 将窗格向 左/下/上/右 扩大 5 格 |
-| `Prefix + +` | 最大化/还原当前窗格 |
-| `Prefix + x` | 关闭当前窗格 |
-| `Prefix + z` | 原生最大化/还原 |
-| `Prefix + {/}` | 窗格位置左/右交换 |
-| `Prefix + Space` | 切换窗格布局 |
+| 按键 | 功能 | 来源 |
+|------|------|------|
+| `Prefix + _` | 垂直分割（`split-window -h`，左右分栏，保留目录） | Oh My Tmux |
+| `Prefix + -` | 水平分割（`split-window -v`，上下分栏，保留目录） | Oh My Tmux |
+| `Prefix + h/j/k/l` | 切换到 左/下/上/右 窗格（Vim 风格） | Oh My Tmux |
+| `Prefix + H/J/K/L` | 将窗格向 左/下/上/右 扩大 | Oh My Tmux |
+| `Prefix + +` | 最大化/还原当前窗格（独立窗口模式） | Oh My Tmux |
+| `Prefix + <` / `>` | 窗格位置左/右交换 | Oh My Tmux |
+| `Prefix + x` | 关闭当前窗格 | tmux 原生 |
+| `Prefix + z` | 原生最大化/还原（`resize-pane -Z`） | tmux 原生 |
+| `Prefix + {` / `}` | 窗格位置左/右交换（原生方式） | tmux 原生 |
+| `Prefix + Space` | 切换窗格布局 | tmux 原生 |
 
 #### 窗口（Window）操作
 
-| 按键 | 功能 |
-|------|------|
-| `Prefix + c` | 新建窗口（SSH 感知，保留当前目录） |
-| `Prefix + ,` | 重命名窗口 |
-| `Prefix + n/p` | 下一个/上一个窗口 |
-| `Prefix + 1-9` | 跳转到指定编号窗口 |
-| `Prefix + &` | 关闭当前窗口 |
+| 按键 | 功能 | 来源 |
+|------|------|------|
+| `Prefix + c` | 新建窗口 | tmux 原生 |
+| `Prefix + ,` | 重命名窗口 | tmux 原生 |
+| `Prefix + C-h` / `C-l` | 上一个/下一个窗口（Oh My Tmux 替代原生 `n`/`p`） | Oh My Tmux |
+| `Prefix + Tab` | 切换到上一个活跃窗口 | Oh My Tmux |
+| `Prefix + 1-9` | 跳转到指定编号窗口 | tmux 原生 |
+| `Prefix + &` | 关闭当前窗口 | tmux 原生 |
 
 #### 会话（Session）操作
 
-| 按键 | 功能 |
-|------|------|
-| `Prefix + C-s` | 交互式会话选择器 |
-| `Prefix + s` | 会话树 |
-| `Prefix + w` | 窗口树预览 |
+| 按键 | 功能 | 来源 |
+|------|------|------|
+| `Prefix + C-c` | 新建会话 | Oh My Tmux |
+| `Prefix + C-f` | 按名称查找并切换会话 | Oh My Tmux |
+| `Prefix + s` | 会话树（交互式选择） | tmux 原生 |
+| `Prefix + w` | 窗口树预览 | tmux 原生 |
+| `Prefix + BTab` | 切换到上一个会话 | Oh My Tmux |
 
 #### 复制模式（Vi 风格）
 
-| 按键 | 功能 |
-|------|------|
-| `Prefix + Enter` | 进入复制模式 |
-| `v` | 开始选择（visual） |
-| `y` | 复制到系统剪贴板 |
-| `Ctrl+r` | 反向搜索 |
+| 按键 | 功能 | 来源 |
+|------|------|------|
+| `Prefix + Enter` | 进入复制模式 | Oh My Tmux |
+| `v` | 开始选择（visual） | Oh My Tmux |
+| `y` | 复制到粘贴缓冲区 | Oh My Tmux |
+| `Ctrl+r` | 反向搜索 | tmux 原生 |
 
 #### 其他
 
-| 按键 | 功能 |
-|------|------|
-| `Prefix + r` | 重载 tmux 配置 |
-| `Prefix + m` | 切换鼠标模式 |
-| `Prefix + I` | 安装 TPM 插件 |
-| `Prefix + u` | 更新 TPM 插件 |
-| `Prefix + d` | 分离会话 |
-| 鼠标点击 | 切换窗格 / 选择窗口 / 拖拽 / 滚动 |
+| 按键 | 功能 | 来源 |
+|------|------|------|
+| `Prefix + e` | 在编辑器中打开 `.tmux.conf.local` | Oh My Tmux |
+| `Prefix + r` | 重载 tmux 配置 | Oh My Tmux |
+| `Prefix + m` | 切换鼠标模式 | Oh My Tmux |
+| `Prefix + I` | 安装 TPM 插件 | TPM 插件 |
+| `Prefix + u` | 更新 TPM 插件 | TPM 插件 |
+| `Prefix + d` | 分离会话 | tmux 原生 |
+| `C-l`（无需 Prefix） | 清屏并清除回滚历史 | Oh My Tmux |
+| 鼠标点击 | 切换窗格 / 选择窗口 / 拖拽 / 滚动 | tmux 原生 |
 
-### 2.4 通用配置
+### 2.5 通用配置
 
 | 设置 | 值 | 说明 |
 |------|-----|------|
@@ -177,18 +196,4 @@
 | `~/.tmux.conf` | install.sh 自动创建 symlink |
 | `~/.tmux.conf.local` | 自定义配置（主题 / 插件 / 快捷键） |
 
----
 
-## 四、生效方法
-
-```bash
-# 1. 安装 Oh my tmux!
-curl -fsSL "https://github.com/gpakosz/.tmux/raw/refs/heads/master/install.sh#$(date +%s)" | bash
-
-# 2. 重新加载 zsh 配置
-exec zsh
-
-# 3. 启动 tmux，安装插件：Prefix + I
-```
-
-或打开一个新的终端窗口。
